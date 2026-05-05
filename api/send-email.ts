@@ -25,7 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const mailOptions = {
     from: `"Watertight Consultants Website" <${process.env.GMAIL_USER}>`,
-    to: process.env.GMAIL_USER, // Sends to your own inbox
+    to: `${process.env.GMAIL_USER}, admin@offing.biz`, // Sends to multiple recipients
     replyTo: email,             // Reply goes directly to the sender
     subject: `New Inquiry: ${subject} — from ${name}`,
     html: `
