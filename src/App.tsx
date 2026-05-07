@@ -39,7 +39,8 @@ import {
   Mail,
   User,
   Pencil,
-  ChevronDown
+  ChevronDown,
+  Play
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
@@ -47,6 +48,7 @@ import { useState, useEffect, useRef } from 'react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,20 +59,17 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled || isMenuOpen ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 flex items-center justify-center relative">
-            <div className={`absolute inset-0 border-[1.5px] rotate-45 rounded-sm ${isScrolled ? 'border-slate-900' : 'border-white'}`}></div>
-            <div className={`absolute inset-[6px] border-[1px] rotate-45 rounded-sm ${isScrolled ? 'border-slate-900' : 'border-white'} opacity-60`}></div>
-            <div className={`absolute h-full w-[1.5px] ${isScrolled ? 'bg-slate-900' : 'bg-white'}`}></div>
-          </div>
-          <div className={`flex flex-col leading-none ${isScrolled ? 'text-slate-900' : 'text-white'}`}>
-            <span className="font-extrabold tracking-[0.1em] text-xl">WATERTIGHT</span>
-            <span className="text-[8px] tracking-[0.6em] font-black opacity-90 uppercase mt-1">CONSULTANTS</span>
-          </div>
+          <img 
+            src="/img/watertight_logo.png" 
+            alt="Watertight Consultants Logo" 
+            className="h-12 md:h-16 w-auto object-contain transition-all duration-300"
+          />
         </div>
 
+        {/* Desktop Menu */}
         <div className={`hidden md:flex items-center gap-8 font-bold text-sm ${isScrolled ? 'text-slate-700' : 'text-white'}`}>
           <a href="#home" className="text-brand relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-brand uppercase tracking-widest">Home</a>
           <a href="#about" className="hover:text-brand transition-colors uppercase tracking-widest">About Us</a>
@@ -79,11 +78,34 @@ const Navbar = () => {
           <a href="#contact" className="hover:text-brand transition-colors uppercase tracking-widest">Contact</a>
         </div>
 
-        <button className={`flex items-center gap-2 border px-6 py-2 rounded-full text-sm font-bold transition-all group ${isScrolled ? 'border-slate-300 text-slate-700 hover:border-brand hover:text-brand' : 'border-white text-white hover:bg-white/10'}`}>
-          <Phone className="w-4 h-4" />
-          <span>Call Us</span>
+        {/* Mobile Menu Button */}
+        <button 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className={`md:hidden p-2 rounded-lg transition-colors ${isScrolled || isMenuOpen ? 'text-slate-700 hover:bg-slate-100' : 'text-white hover:bg-white/10'}`}
+        >
+          {isMenuOpen ? <ArrowRight className="w-6 h-6 rotate-90" /> : <div className="space-y-1.5"><div className="w-6 h-0.5 bg-current"></div><div className="w-6 h-0.5 bg-current"></div><div className="w-6 h-0.5 bg-current"></div></div>}
         </button>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-white border-t border-slate-100 overflow-hidden"
+          >
+            <div className="flex flex-col p-6 gap-6 font-bold text-sm text-slate-700">
+              <a href="#home" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Home</a>
+              <a href="#about" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">About Us</a>
+              <a href="#services" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Services</a>
+              <a href="#projects" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Projects</a>
+              <a href="#contact" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Contact</a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
@@ -96,18 +118,18 @@ const Hero = () => {
         <img 
           src="/Final.png" 
           alt="Maritime Industrial Platform" 
-          className="w-full h-full object-cover object-right"
+          className="w-full h-full object-cover object-center lg:object-right"
         />
         {/* Deep gradient to blend the image into the dark left section */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#040911] via-[#040911]/40 to-transparent" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full mt-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full mt-32 md:mt-20 flex flex-col items-center md:items-start text-center md:text-left">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-xl"
+          className="max-w-xl flex flex-col items-center md:items-start"
         >
           <h1 className="text-white text-3xl md:text-[3.25rem] font-black leading-[1.1] mb-6 tracking-tight">
             Built for <span className="text-brand">Offshore.</span><br />
@@ -115,7 +137,7 @@ const Hero = () => {
           </h1>
           <div className="w-12 h-[3px] bg-brand mb-6 rounded-full" />
           <p className="text-white/70 text-lg md:text-xl font-medium max-w-lg leading-relaxed">
-            Powering Marine Operations<br className="hidden md:block" />
+            Powering Marine Operations{' '}<br className="hidden md:block" />
             with <span className="text-brand">Precision & Expertise.</span>
           </p>
         </motion.div>
@@ -149,8 +171,8 @@ const About = () => {
   const [currentMedia, setCurrentMedia] = useState(0);
   
   const mediaItems = [
-    { type: 'image', src: '/Final.png', alt: 'Offshore Platform' },
-    { type: 'video', src: '/Video/video_1.mp4' },
+    { type: 'image', src: '/img/Final.png', alt: 'Offshore Platform' },
+    { type: 'video', src: '/Video/video 1.mp4' },
     { type: 'video', src: '/Video/2.mp4' }
   ];
 
@@ -162,92 +184,155 @@ const About = () => {
   }, []);
 
   return (
-    <section id="about" className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="text-brand font-bold tracking-[0.15em] text-[10px] uppercase mb-3 block">
-            About Us
-          </span>
-          <h2 className="text-slate-900 text-3xl md:text-[2.25rem] font-black mb-6 leading-[1.2] tracking-tight">
-            We Deliver Reliable &<br />High-Impact Offshore Solutions
-          </h2>
-          <div className="w-10 h-[2px] bg-brand mb-8" />
-          <div className="space-y-6 text-slate-500 text-base leading-relaxed font-medium max-w-lg">
-            <p>
-              Watertight Consultants is a specialized marine and offshore consulting firm delivering strategic solutions across chartering, asset transactions, and project logistics in global markets. 
-            </p>
-            <p>
-              We combine industry expertise, market intelligence, and execution precision to support complex offshore operations with confidence, efficiency, and long-term value.
-            </p>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] w-full group bg-[#0A192F]"
-        >
-          <AnimatePresence>
-            <motion.div
-              key={currentMedia}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.7 }}
-              className="absolute inset-0"
-            >
-              {mediaItems[currentMedia].type === 'image' ? (
-                <img 
-                  src={mediaItems[currentMedia].src} 
-                  alt={mediaItems[currentMedia].alt} 
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <video 
-                  src={mediaItems[currentMedia].src}
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Navigation Arrows */}
-          <button 
-            onClick={() => setCurrentMedia((prev) => (prev === 0 ? mediaItems.length - 1 : prev - 1))}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/40 z-20"
+    <section id="about" className="py-24 bg-white relative overflow-hidden">
+      {/* Background Decorative Shapes */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] border-[1px] border-slate-100 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none opacity-50" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] border-[1px] border-slate-50 rounded-full translate-y-1/3 -translate-x-1/3 pointer-events-none opacity-50" />
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          
+          {/* Left Column: Text & Video */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="space-y-8"
           >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button 
-            onClick={() => setCurrentMedia((prev) => (prev + 1) % mediaItems.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/40 z-20"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+            <div>
+              <span className="text-orange-500 font-bold tracking-[0.2em] text-[11px] uppercase mb-4 block">
+                About Us
+              </span>
+              <h2 className="text-slate-900 text-4xl md:text-[2.75rem] font-black mb-6 leading-[1.1] tracking-tight">
+                We Deliver Reliable &<br />High-Impact Offshore Solutions
+              </h2>
+              <div className="w-14 h-[3px] bg-orange-500 mb-8 rounded-full" />
+              <div className="space-y-6 text-slate-500 text-[1.05rem] leading-relaxed font-medium max-w-xl">
+                <p>
+                  Watertight Consultants is a specialized marine and offshore consulting firm delivering strategic solutions across chartering, asset transactions, and project logistics in global markets. 
+                </p>
+                <p>
+                  We combine industry expertise, market intelligence, and execution precision to support complex offshore operations with confidence, efficiency, and long-term value.
+                </p>
+              </div>
+            </div>
 
-          {/* Navigation Dots */}
-          <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-20">
-            {mediaItems.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentMedia(idx)}
-                className={`h-2 rounded-full transition-all duration-300 ${currentMedia === idx ? 'bg-brand w-8' : 'bg-white/60 w-2 hover:bg-white'}`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-        </motion.div>
+            {/* Video Section */}
+            <div className="relative group max-w-lg">
+              <div className="relative rounded-[2rem] overflow-hidden aspect-video shadow-2xl bg-slate-900 border-4 border-white">
+                <iframe
+                  src="https://www.youtube.com/embed/HIyDu1kdz2I"
+                  title="Watertight Marine & Energy Consultants"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+
+              {/* Subtitle */}
+              <a 
+                href="https://youtu.be/HIyDu1kdz2I" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="mt-4 flex items-center gap-3 text-slate-900 font-bold text-sm cursor-pointer hover:text-orange-500 transition-colors"
+              >
+                <div className="w-6 h-6 rounded-full border-2 border-orange-500 flex items-center justify-center">
+                  <Play className="w-2.5 h-2.5 text-orange-500 fill-orange-500 ml-0.5" />
+                </div>
+                Click on video and know us in 60 seconds!
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Right Column: Media Slider with Feature Overlay */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] aspect-[10/11] bg-[#040911]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentMedia}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="absolute inset-0"
+                >
+                  {mediaItems[currentMedia].type === 'image' ? (
+                    <img
+                      src={mediaItems[currentMedia].src}
+                      alt={mediaItems[currentMedia].alt}
+                      className="w-full h-full object-cover opacity-80"
+                    />
+                  ) : (
+                    <video
+                      src={mediaItems[currentMedia].src}
+                      className="w-full h-full object-cover opacity-80"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                    />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              
+              {/* Bottom Gradient for Text Legibility */}
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#040911] via-[#040911]/60 to-transparent" />
+
+              {/* Features Overlay */}
+              <div className="absolute bottom-12 left-0 right-0 px-8">
+                <div className="grid grid-cols-3 gap-4">
+                  {/* Item 1 */}
+                  <div className="flex flex-col items-center text-center group">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3 group-hover:bg-orange-500/20 group-hover:border-orange-500/50 transition-all duration-300">
+                      <Ship className="w-6 h-6 text-orange-500" />
+                    </div>
+                    <div className="text-white text-[12px] md:text-[14px] font-bold leading-tight mb-2">Marine & Offshore Experts</div>
+                    <div className="w-8 h-[2px] bg-orange-500 rounded-full mx-auto" />
+                  </div>
+                  
+                  {/* Item 2 */}
+                  <div className="flex flex-col items-center text-center group">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3 group-hover:bg-orange-500/20 group-hover:border-orange-500/50 transition-all duration-300">
+                      <Globe2 className="w-6 h-6 text-orange-500" />
+                    </div>
+                    <div className="text-white text-[12px] md:text-[14px] font-bold leading-tight mb-2">Global Reach Local Insight</div>
+                    <div className="w-8 h-[2px] bg-orange-500 rounded-full mx-auto" />
+                  </div>
+
+                  {/* Item 3 */}
+                  <div className="flex flex-col items-center text-center group">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3 group-hover:bg-orange-500/20 group-hover:border-orange-500/50 transition-all duration-300">
+                      <Handshake className="w-6 h-6 text-orange-500" />
+                    </div>
+                    <div className="text-white text-[12px] md:text-[14px] font-bold leading-tight mb-2">Trusted by Clients Worldwide</div>
+                    <div className="w-8 h-[2px] bg-orange-500 rounded-full mx-auto" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Slider Dots */}
+              <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2">
+                {mediaItems.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentMedia(idx)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${currentMedia === idx ? 'bg-orange-500 w-6' : 'bg-white/40 w-1.5 hover:bg-white'}`}
+                  />
+                ))}
+              </div>
+            </div>
+            
+            {/* Decorative Element Behind Image */}
+            <div className="absolute -bottom-6 -right-6 w-full h-full border-2 border-orange-500/10 rounded-[2.5rem] -z-10" />
+          </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -785,9 +870,9 @@ const Contact = () => {
                 <div>
                   <h3 className="text-white font-bold text-[0.85rem] mb-2 tracking-widest opacity-80 uppercase">Capt. Anupam Raizada</h3>
                   <a href="tel:+919833090019" className="text-white text-2xl font-black block mb-2 hover:text-brand transition-colors">+91 98330 90019</a>
-                  <a href="mailto:sagar115960@gmail.com" className="text-white/50 text-sm font-medium flex items-center gap-2 hover:text-white transition-colors">
+                  <a href="mailto:info@watertightconsultants.com" className="text-white/50 text-sm font-medium flex items-center gap-2 hover:text-white transition-colors">
                     <Mail className="w-3.5 h-3.5 text-brand" />
-                    sagar115960@gmail.com
+                    info@watertightconsultants.com
                   </a>
                 </div>
               </div>
@@ -868,11 +953,11 @@ const Contact = () => {
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 px-4 text-sm font-medium focus:ring-2 focus:ring-brand/20 focus:border-brand outline-none transition-all appearance-none text-slate-400"
                 >
                   <option value="">Subject *</option>
-                  <option value="Chartering">Chartering Operations</option>
-                  <option value="Assets">Marine Asset Transactions</option>
-                  <option value="Cargo">Project Cargo Handling</option>
-                  <option value="Logistics">Offshore Logistics Execution</option>
-                  <option value="Other">Other Inquiry</option>
+                  <option value="Chartering Operations">Chartering Operations</option>
+                  <option value="Marine Asset Transactions">Marine Asset Transactions</option>
+                  <option value="Project Cargo Handling">Project Cargo Handling</option>
+                  <option value="Offshore Logistics Execution">Offshore Logistics Execution</option>
+                  <option value="Other Inquiry">Other Inquiry</option>
                 </select>
                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
               </div>
