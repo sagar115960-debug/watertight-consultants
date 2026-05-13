@@ -40,7 +40,8 @@ import {
   User,
   Pencil,
   ChevronDown,
-  Play
+  Play,
+  Anchor
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
@@ -172,7 +173,7 @@ const About = () => {
   
   const mediaItems = [
     { type: 'image', src: '/img/Final.png', alt: 'Offshore Platform' },
-    { type: 'video', src: '/Video/video 1.mp4' },
+    { type: 'video', src: '/Video/video_1.mp4' },
     { type: 'video', src: '/Video/2.mp4' }
   ];
 
@@ -605,48 +606,185 @@ const Services = () => {
   );
 };
 
+const ProjectCard = ({ project, index }: { project: any, index: number }) => {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    if (project.type !== 'slider' || !project.images) return;
+    
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % project.images.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [project.type, project.images]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="relative bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] group min-h-full"
+    >
+      <div className={`relative ${project.points.length === 0 ? 'h-full w-full' : (project.type === 'video' ? 'aspect-[3/4]' : 'aspect-[4/3] m-4 rounded-2xl')} overflow-hidden bg-slate-100`}>
+        {project.type === 'video' ? (
+          <video 
+            src={project.video} 
+            className={`w-full h-full object-cover ${project.rotation || ''} scale-[1.8]`}
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+        ) : project.type === 'slider' ? (
+          <AnimatePresence mode="wait">
+            <motion.img 
+              key={currentImage}
+              src={project.images[currentImage]} 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="w-full h-full object-cover"
+            />
+          </AnimatePresence>
+        ) : (
+          <img 
+            src={project.image} 
+            alt={project.title} 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1566232392379-afd9298e6a46?auto=format&fit=crop&q=80&w=800';
+            }}
+          />
+        )}
+      </div>
+
+      {/* Content Section - Only for cards with text */}
+      {project.points.length > 0 && (
+        <div className="px-6 pb-8 pt-2">
+          <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center mb-4">
+            {project.icon}
+          </div>
+          <h3 className="text-slate-900 font-bold text-[0.95rem] mb-3 leading-tight min-h-[2.5rem] flex items-center">
+            {project.title}
+          </h3>
+          <div className="w-8 h-[2px] bg-brand mb-6 opacity-60" />
+          
+          <ul className="space-y-4">
+            {project.points.map((point: string, i: number) => (
+              <li key={i} className="flex items-start gap-3 text-[0.8rem] font-medium text-slate-500">
+                <CheckCircle className="w-3.5 h-3.5 text-brand shrink-0 mt-0.5" />
+                <span className="leading-tight">{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
 const Projects = () => {
   const projects = [
     {
       title: "Chartering Operations",
-      icon: <Ship className="w-5 h-5 text-brand" />,
-      image: "/img/Chartering Operations.png",
+      type: "video",
+      video: "/Video/P1.mp4",
+      rotation: "-rotate-90",
+      points: []
+    },
+    {
+      title: "GENESIS ALPHA",
+      icon: <Anchor className="w-5 h-5 text-blue-600" />,
+      type: "image",
+      image: "/img/Projects/Genesis Alpha.png",
       points: [
-        "Vessel chartering across global offshore markets",
-        "Long & short term charters",
-        "Tailored solutions for every client need"
+        "Year of Built: 2006",
+        "Flag: St. Kitts & Nevis",
+        "Class: IRS",
+        "GRT: 1316 T",
+        "Remarks: Chemical/ Oil Product Tanker, DWT: 1722 T"
       ]
     },
     {
-      title: "Marine Asset Transactions",
-      icon: <Handshake className="w-5 h-5 text-brand" />,
-      image: "/img/Marine Asset Transaction.png",
+      title: "AJR WB1 – 4730 BHP",
+      icon: <Anchor className="w-5 h-5 text-blue-600" />,
+      type: "slider",
+      images: ["/img/Projects/AJRWB-1.jpg", "/img/Projects/AJRWB-1(1).jpg"],
       points: [
-        "Buying & selling of offshore marine assets",
-        "PSV, AHTS, OSV & more",
-        "End-to-end transaction support"
+        "Year of Built: 2007",
+        "Flag: INDIAN",
+        "Class: IRS",
+        "GRT: 1320 T",
+        "Remarks: First vessel to be registered under Indian Flag as IP Code Work Boat, 4 point mooring with crane, total accomodation for 59 passengers"
       ]
     },
     {
-      title: "Project Cargo Handling",
-      icon: <Container className="w-5 h-5 text-brand" />,
-      image: "/img/Project Cargo Handling.png",
+      title: "DRA 1 – 3200 BHP",
+      icon: <Anchor className="w-5 h-5 text-blue-600" />,
+      type: "slider",
+      images: ["/img/Projects/DRA-1.jpg", "/img/Projects/dra-1(1).jpg"],
       points: [
-        "Heavy lift & breakbulk cargo",
-        "End-to-end logistics management",
-        "Safe, timely & efficient project execution"
+        "Year of Built: 2006",
+        "Flag: INDIAN",
+        "Class: IRS",
+        "GRT: 467 T",
+        "Remarks: 40 T Bollard Pull, Anchor Handling and Towing Tug."
       ]
     },
     {
-      title: "Offshore Logistics Execution",
-      icon: <Globe2 className="w-5 h-5 text-brand" />,
-      image: "/img/Offshore Logistics Execution.png",
+      title: "FAIRMACS NICOBAR - 3200 BHP",
+      icon: <Anchor className="w-5 h-5 text-blue-600" />,
+      type: "slider",
+      images: ["/img/Projects/FairmacsNicobar.jpg", "/img/Projects/FairmacsNicobar(1).jpg"],
       points: [
-        "Integrated logistics solutions",
-        "Global network & local expertise",
-        "On-time delivery with operational excellence"
+        "Year of Built: 2006",
+        "Flag / Port of Registry: INDIAN / MUMBAI",
+        "Class: NKK / IRS",
+        "GRT: 467 T",
+        "Remarks: 40 T Bollard Pull, Anchor Handling and Towing Tug."
       ]
-    }
+    },
+    {
+      title: "AQUA TOW – 3600 BHP",
+      icon: <Anchor className="w-5 h-5 text-blue-600" />,
+      type: "image",
+      image: "/img/Projects/Aqua-tow.jpg",
+      points: [
+        "Year of Built: 2010",
+        "Flag / Port of Registry: INDIAN / MUMBAI",
+        "Class: NKK / IRS",
+        "GRT: 476 T",
+        "Remarks: 50 T Bollard Pull, Anchor Handling and Towing Tug."
+      ]
+    },
+    {
+      title: "DRA 2",
+      icon: <Anchor className="w-5 h-5 text-blue-600" />,
+      type: "image",
+      image: "/img/Projects/DRA-2.jpg",
+      points: [
+        "Year of Built: 2006",
+        "Flag / Port of Registry: INDIAN / MUMBAI",
+        "Class: IRS",
+        "GRT: 1959 T",
+        "Remarks: Flat top barge with side walls, 12 T/m^2 deck strength, DWT: 4765 T"
+      ]
+    },
+    {
+      title: "OCEAN MANTRA",
+      icon: <Anchor className="w-5 h-5 text-blue-600" />,
+      type: "slider",
+      images: ["/img/Projects/Ocean-mantra(1).jpg", "/img/Projects/Ocean-mantra2.jpg"],
+      points: [
+        "Year of Built: 2022",
+        "Flag: Indian Flag",
+        "Class: IRS",
+        "GRT: 380 T",
+        "Remarks: Flat top barge, 8 T/m^2 deck strength, DWT: 750 T"
+      ]
+    },
   ];
 
   return (
@@ -665,57 +803,13 @@ const Projects = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] group"
-            >
-              {/* Image Section */}
-              <div className="relative aspect-[4/3] overflow-hidden m-4 rounded-2xl">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1566232392379-afd9298e6a46?auto=format&fit=crop&q=80&w=800';
-                  }}
-                />
-              </div>
-
-              {/* Content Section */}
-              <div className="px-6 pb-8 pt-2">
-                <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center mb-4">
-                  {project.icon}
-                </div>
-                <h3 className="text-slate-900 font-bold text-[0.95rem] mb-3 leading-tight min-h-[2.5rem] flex items-center">
-                  {project.title}
-                </h3>
-                <div className="w-8 h-[2px] bg-brand mb-6 opacity-60" />
-                
-                <ul className="space-y-4">
-                  {project.points.map((point, i) => (
-                    <li key={i} className="flex items-start gap-3 text-[0.8rem] font-medium text-slate-500">
-                      <CheckCircle className="w-3.5 h-3.5 text-brand shrink-0 mt-0.5" />
-                      <span className="leading-tight">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
+            <ProjectCard key={index} project={project} index={index} />
           ))}
         </div>
 
-        <div className="flex justify-center">
-          <button className="border-2 border-brand/20 text-brand px-10 py-3.5 rounded-xl font-bold flex items-center gap-3 hover:bg-brand hover:text-white hover:border-brand transition-all text-sm group">
-            View All Projects
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </button>
-        </div>
+
       </div>
     </section>
   );
