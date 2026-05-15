@@ -74,7 +74,6 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-9 font-bold text-[13px] tracking-[0.15em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
           <a href="#home" className="text-brand uppercase transition-colors">Home</a>
-          <a href="/duplicate" className="text-white hover:text-brand transition-colors uppercase">New Design</a>
           <a href="#about" className="text-white hover:text-brand transition-colors uppercase">About Us</a>
           <a href="#services" className="text-white hover:text-brand transition-colors uppercase">Services</a>
           <a href="#projects" className="text-white hover:text-brand transition-colors uppercase">Projects</a>
@@ -101,7 +100,6 @@ const Navbar = () => {
           >
             <div className="flex flex-col p-6 gap-6 font-bold text-sm text-slate-700">
               <a href="#home" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Home</a>
-              <a href="/duplicate" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">New Design</a>
               <a href="#about" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">About Us</a>
               <a href="#services" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Services</a>
               <a href="#projects" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Projects</a>
@@ -122,10 +120,15 @@ const Hero = () => {
         <img 
           src="/img/Final.png" 
           alt="Maritime Industrial Platform" 
-          className="w-full h-full object-cover object-center lg:object-right"
+          className="w-full h-full object-cover object-[center_30%] lg:object-[right_30%]"
         />
-        {/* Smooth Gradient Transition from Left Panel */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/60 to-transparent hidden lg:block" />
+        {/* Gradient: solid navy left → warm navy mid → transparent right */}
+        <div
+          className="absolute inset-0 hidden lg:block"
+          style={{
+            background: 'linear-gradient(to right, #0B192C 0%, rgba(11,25,44,0.55) 6%, rgba(14,20,16,0.12) 11%, transparent 15%)'
+          }}
+        />
         {/* Mobile Overlay */}
         <div className="absolute inset-0 bg-navy/60 lg:hidden" />
       </div>
@@ -137,7 +140,7 @@ const Hero = () => {
           transition={{ duration: 1, ease: "easeOut" }}
           className="max-w-2xl"
         >
-          <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-black leading-[1.15] mb-8 tracking-tight">
+          <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-8 tracking-tight">
             Built for <span className="text-brand">Offshore.</span><br />
             Trusted <span className="text-brand">Worldwide.</span>
           </h1>
@@ -795,9 +798,9 @@ const Projects = () => {
       points: [
         "Year of Built: 2010",
         "Flag / Port of Registry: INDIAN / MUMBAI",
-        "Class: NKK / IRS",
-        "GRT: 476 T",
-        "Remarks: 50 T Bollard Pull, Anchor Handling and Towing Tug."
+        "Class: IRS",
+        "GRT: 497 T",
+        "Remarks: 45 T Bollard Pull, Anchor Handling and Towing Tug."
       ]
     },
     {
@@ -849,8 +852,6 @@ const Projects = () => {
             <ProjectCard key={index} project={project} index={index} />
           ))}
         </div>
-
-
       </div>
     </section>
   );
@@ -948,14 +949,12 @@ const Contact = () => {
 
   return (
     <section id="contact" className="py-24 relative overflow-hidden bg-[#040911]">
-      {/* Background Image restricted to the right */}
       <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full z-0">
         <img 
           src="/img/contact_bg.png" 
           alt="Contact Background" 
           className="w-full h-full object-cover object-right opacity-90"
         />
-        {/* Horizontal gradient to fade from dark background into the image */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#040911] via-[#040911]/60 to-transparent" />
       </div>
 
@@ -972,10 +971,8 @@ const Contact = () => {
         </div>
 
         <div className="bg-[#0A192F]/40 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl flex flex-col lg:flex-row">
-          {/* Left Section - Contact Info */}
           <div className="lg:w-[45%] bg-[#0A192F]/60 p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-white/5">
             <div className="space-y-12">
-              {/* Address */}
               <div className="flex gap-6">
                 <div className="w-12 h-12 rounded-full border border-brand/30 flex items-center justify-center shrink-0">
                   <Home className="w-5 h-5 text-brand" />
@@ -996,7 +993,6 @@ const Contact = () => {
 
               <div className="h-[1px] bg-white/5 w-full" />
 
-              {/* Contact Person 1 */}
               <div className="flex gap-6 group">
                 <div className="w-12 h-12 rounded-full border border-brand/30 flex items-center justify-center shrink-0 group-hover:bg-brand/10 transition-colors">
                   <Phone className="w-5 h-5 text-brand" />
@@ -1013,7 +1009,6 @@ const Contact = () => {
 
               <div className="h-[1px] bg-white/5 w-full" />
 
-              {/* Contact Person 2 */}
               <div className="flex gap-6 group">
                 <div className="w-12 h-12 rounded-full border border-brand/30 flex items-center justify-center shrink-0 group-hover:bg-brand/10 transition-colors">
                   <Phone className="w-5 h-5 text-brand" />
@@ -1030,7 +1025,6 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Right Section - Form */}
           <div className="lg:w-[55%] bg-white p-8 md:p-12">
             <div className="mb-10">
               <div className="flex items-center gap-4 mb-3">
@@ -1143,8 +1137,6 @@ const Footer = () => {
     </footer>
   );
 };
-
-// --- Main App ---
 
 export default function App() {
   return (
