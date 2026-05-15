@@ -74,6 +74,7 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-9 font-bold text-[13px] tracking-[0.15em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
           <a href="#home" className="text-brand uppercase transition-colors">Home</a>
+          <a href="/duplicate" className="text-white hover:text-brand transition-colors uppercase">New Design</a>
           <a href="#about" className="text-white hover:text-brand transition-colors uppercase">About Us</a>
           <a href="#services" className="text-white hover:text-brand transition-colors uppercase">Services</a>
           <a href="#projects" className="text-white hover:text-brand transition-colors uppercase">Projects</a>
@@ -100,6 +101,7 @@ const Navbar = () => {
           >
             <div className="flex flex-col p-6 gap-6 font-bold text-sm text-slate-700">
               <a href="#home" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Home</a>
+              <a href="/duplicate" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">New Design</a>
               <a href="#about" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">About Us</a>
               <a href="#services" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Services</a>
               <a href="#projects" onClick={() => setIsMenuOpen(false)} className="hover:text-brand transition-colors uppercase tracking-widest">Projects</a>
