@@ -40,7 +40,9 @@ import {
   Anchor,
   X,
   Volume2,
-  VolumeX
+  VolumeX,
+  Maximize,
+  Minimize
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
@@ -361,7 +363,6 @@ const About = () => {
                     <div className="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center mb-4 transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg shadow-orange-500/30">
                       <Play className="w-5 h-5 text-white fill-white" />
                     </div>
-                    <h4 className="text-white font-bold text-lg mb-1">{video.title}</h4>
                     <p className="text-white/60 text-xs font-bold uppercase tracking-widest">Click to expand</p>
                   </div>
                 </div>
@@ -385,20 +386,12 @@ const About = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-5xl w-full aspect-video rounded-3xl overflow-hidden bg-black shadow-2xl"
+              className="relative max-w-5xl w-full max-h-[85vh] md:aspect-video rounded-2xl md:rounded-3xl overflow-hidden bg-black shadow-2xl border border-white/5"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => setSelectedVideo(null)}
-                className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors backdrop-blur-md"
-              >
-                <X className="w-6 h-6" />
-              </button>
-              
               <video
                 ref={videoRef}
                 src={selectedVideo}
-                className={`w-full h-full object-contain ${videoRotation}`}
                 autoPlay
                 playsInline
                 muted={isMuted}
@@ -409,6 +402,7 @@ const About = () => {
                   }
                 }}
                 onEnded={() => setIsPlaying(false)}
+                className={`w-full h-full object-contain transition-transform duration-500 ${videoRotation}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (videoRef.current?.paused) {
@@ -421,12 +415,22 @@ const About = () => {
                 }}
               />
 
-              {/* Custom Controls */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent pointer-events-auto">
-                <div className="flex flex-col gap-4">
-                  {/* Progress Bar */}
-                  <div 
-                    className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden cursor-pointer group/progress"
+              {/* Enhanced Close Button for Mobile */}
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="absolute top-4 right-4 md:top-6 md:right-6 z-[110] w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-all duration-300 backdrop-blur-xl border border-white/10 group active:scale-90"
+                aria-label="Close video"
+              >
+                <X className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-90 transition-transform duration-300" />
+              </button>
+
+
+              {/* Professional Video Controls Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 md:px-8 md:pb-8 pt-20 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none">
+                <div className="max-w-4xl mx-auto flex flex-col gap-4 pointer-events-auto">
+                  
+                  {/* Progress Bar with hover effect */}
+                  <div className="relative group/progress h-1.5 w-full bg-white/20 rounded-full overflow-hidden cursor-pointer backdrop-blur-sm"
                     onClick={(e) => {
                       if (videoRef.current) {
                         const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -436,16 +440,15 @@ const About = () => {
                       }
                     }}
                   >
-                    <div 
-                      className="h-full bg-orange-500 relative transition-all"
+                    <motion.div 
+                      className="absolute top-0 left-0 h-full bg-orange-500"
                       style={{ width: `${progress}%` }}
-                    >
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover/progress:opacity-100 shadow-lg" />
-                    </div>
+                    />
+                    <div className="absolute top-0 left-0 h-full w-full opacity-0 group-hover/progress:opacity-100 transition-opacity bg-white/10" />
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2 md:gap-6">
                       <button 
                         onClick={() => {
                           if (videoRef.current?.paused) {
@@ -456,21 +459,47 @@ const About = () => {
                             setIsPlaying(false);
                           }
                         }}
-                        className="text-white hover:text-orange-500 transition-colors"
+                        className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors text-white"
                       >
-                        {isPlaying ? <div className="flex gap-1"><div className="w-1.5 h-5 bg-current rounded-full" /><div className="w-1.5 h-5 bg-current rounded-full" /></div> : <Play className="w-6 h-6 fill-current" />}
+                        {isPlaying ? (
+                          <div className="flex gap-1.5">
+                            <div className="w-1.5 h-5 bg-current rounded-full" />
+                            <div className="w-1.5 h-5 bg-current rounded-full" />
+                          </div>
+                        ) : (
+                          <Play className="w-6 h-6 fill-current" />
+                        )}
                       </button>
 
                       <button 
                         onClick={() => setIsMuted(!isMuted)}
-                        className="text-white hover:text-orange-500 transition-colors"
+                        className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors text-white"
                       >
                         {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
                       </button>
+
+                      <button 
+                        onClick={() => {
+                          if (videoRef.current) {
+                            if (videoRef.current.requestFullscreen) {
+                              videoRef.current.requestFullscreen();
+                            } else if ((videoRef.current as any).webkitRequestFullscreen) {
+                              (videoRef.current as any).webkitRequestFullscreen();
+                            } else if ((videoRef.current as any).msRequestFullscreen) {
+                              (videoRef.current as any).msRequestFullscreen();
+                            }
+                          }
+                        }}
+                        className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors text-white"
+                        title="Fullscreen"
+                      >
+                        <Maximize className="w-5 h-5" />
+                      </button>
                     </div>
 
-                    <div className="text-white/60 text-xs font-bold tracking-widest uppercase">
-                      Watertight Consultants | Operations
+                    <div className="hidden sm:flex flex-col items-end">
+                      <span className="text-white font-bold text-[10px] tracking-widest uppercase opacity-80">Operational Video</span>
+                      <span className="text-white/40 text-[9px] font-bold uppercase tracking-[0.1em]">Watertight Consultants</span>
                     </div>
                   </div>
                 </div>
