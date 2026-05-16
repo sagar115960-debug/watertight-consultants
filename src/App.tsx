@@ -494,7 +494,7 @@ const services = [
       "Ensuring that all parties to the agreement remain comfortable throughout the duration of the contract",
       "We have extended our scope of competencies to the growing Offshore Wind Power sector & emerging Marine Renewable Energies (MRE)"
     ],
-    image: "https://images.unsplash.com/photo-1559139225-300456543b56?auto=format&fit=crop&q=80&w=800"
+    image: "/img/chartering_ops.png"
   },
   {
     title: "Market intelligence and Chartering reports",
@@ -525,7 +525,7 @@ const services = [
       "Tonnage For Recycling",
       "Fishing Vessels"
     ],
-    image: "https://images.unsplash.com/photo-1566232392379-afd9298e6a46?auto=format&fit=crop&q=80&w=800"
+    image: "/img/marine_asset_trans.png"
   },
   {
     title: "End to End Solutions for movement of Heavy Lift & Project Cargo",
@@ -536,7 +536,7 @@ const services = [
       "We have the staff, knowledge, and carriers to create an end-to-end logistics solution to get the job done",
       "We are capable of handling any shipment for import or export cargo"
     ],
-    image: "https://images.unsplash.com/photo-1494412574743-01958ee16519?auto=format&fit=crop&q=80&w=800"
+    image: "/img/project_cargo.png"
   },
   {
     title: "Project Management",
@@ -551,7 +551,7 @@ const services = [
       "Seminars & Conferences",
       "Legal and Regulatory Consultancy"
     ],
-    image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80&w=800"
+    image: "/img/offshore_logistics.png"
   },
   {
     title: "Catering Management",
@@ -681,7 +681,7 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
         {project.type === 'video' ? (
           <video 
             src={project.video} 
-            className={`w-full h-full object-cover ${project.rotation || ''} scale-[1.8]`}
+            className={`w-full h-full ${project.objectFit || 'object-cover'} ${project.rotation || ''} scale-[1.8]`}
             autoPlay
             muted
             loop
@@ -696,14 +696,14 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="w-full h-full object-cover"
+              className={`w-full h-full ${project.objectFit || 'object-cover'}`}
             />
           </AnimatePresence>
         ) : (
           <img 
             src={project.image} 
             alt={project.title} 
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className={`w-full h-full ${project.objectFit || 'object-cover'} transition-transform duration-700 group-hover:scale-110`}
             onError={(e) => {
               (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1566232392379-afd9298e6a46?auto=format&fit=crop&q=80&w=800';
             }}
@@ -742,7 +742,8 @@ const Projects = () => {
       title: "GENESIS ALPHA",
       icon: <Anchor className="w-5 h-5 text-blue-600" />,
       type: "image",
-      image: "/img/Projects/Genesis Alpha.png",
+      objectFit: "object-contain",
+      image: "/img/Projects/Genesis_Alpha_new.jpg",
       points: [
         "Year of Built: 2006",
         "Flag: St. Kitts & Nevis",
@@ -768,6 +769,7 @@ const Projects = () => {
       title: "DRA 1 – 3200 BHP",
       icon: <Anchor className="w-5 h-5 text-blue-600" />,
       type: "slider",
+      objectFit: "object-contain",
       images: ["/img/Projects/DRA-1.jpg", "/img/Projects/dra-1(1).jpg"],
       points: [
         "Year of Built: 2006",
@@ -781,6 +783,7 @@ const Projects = () => {
       title: "FAIRMACS NICOBAR - 3200 BHP",
       icon: <Anchor className="w-5 h-5 text-blue-600" />,
       type: "slider",
+      objectFit: "object-contain",
       images: ["/img/Projects/FairmacsNicobar.jpg", "/img/Projects/FairmacsNicobar(1).jpg"],
       points: [
         "Year of Built: 2006",
@@ -794,6 +797,7 @@ const Projects = () => {
       title: "AQUA TOW – 3600 BHP",
       icon: <Anchor className="w-5 h-5 text-blue-600" />,
       type: "image",
+      objectFit: "object-contain",
       image: "/img/Projects/Aqua-tow.jpg",
       points: [
         "Year of Built: 2010",
