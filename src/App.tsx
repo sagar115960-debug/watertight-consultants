@@ -696,14 +696,14 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className={`w-full h-full ${project.objectFit || 'object-cover'}`}
+              className={`w-full h-full ${project.objectFit || 'object-contain'}`}
             />
           </AnimatePresence>
         ) : (
           <img 
             src={project.image} 
             alt={project.title} 
-            className={`w-full h-full ${project.objectFit || 'object-cover'} transition-transform duration-700 group-hover:scale-110`}
+            className={`w-full h-full ${project.objectFit || 'object-contain'} transition-transform duration-700 group-hover:scale-110`}
             onError={(e) => {
               (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1566232392379-afd9298e6a46?auto=format&fit=crop&q=80&w=800';
             }}
